@@ -46,7 +46,7 @@ An example runtime would look something like this:
         <publisher>Lorem Ipsum</publisher>
 
         <files>
-            <file name="qt4.dll" size="350824" md5="7652657fa392fb9418ccf309145dd7b4">
+            <file name="qt4.dll" size="350824" md5="7652657fa392fb9418ccf309145dd7b4" sha512="5814080fe36fa332950c1e56debbc0da7afee699708d8d4af0e4310ed27ce37124b5cf80a08effc9bd4ee5806bcc0a9f7ea6bdc64cee7ef5057fc20d39c9d182">
                 <url>http://example.com/repo/myruntime/qt4.dll</url>
             </file>
 
@@ -59,7 +59,17 @@ An example runtime would look something like this:
 Fields supported:
  - `name`: *Required.* Name of the runtime. Keep it simple. Avoid including your game's name, we all know what it's for - just the patch/expansion level it's for.
  - `publisher`: *Required.* Publisher of the runtime.
- - `files`: *Required.* A list of **file** tags, described later in this document.
+ - `files`: *Required.* A list of **file** tags (see below).
+
+### File tags
+File tags support:
+
+ - `name`: *Required.* Final installed filepath.
+ - `size`: *Required.* File size.
+ - `md5`: *Required.* MD5 sum of the file.
+ - `sha512`: *Recommended.* SHA-512 sum of the file.
+
+Within the file tags is a list of publicly accessible URLs that point to valid mirrors. Other download capabilities other than HTTP/HTTPS may be added in the future.
 
 ## Applications
 Applications are what most projects will only need. This is a custom set of files.
@@ -83,7 +93,7 @@ An example application would look something like this:
         <news url="http://example.com/mygame.rss" />
 
         <files>
-            <file name="game.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e">
+            <file name="game.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
                 <url>http://example.com/repo/mygame/game.exe</url>
             </file>
 
