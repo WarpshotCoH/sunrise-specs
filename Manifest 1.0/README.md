@@ -1,0 +1,128 @@
+# Sunrise manifest specification
+***Version 1.0 (working draft)***
+
+The Sunrise manifest format is partially based on the previous Tequila/Island Rum format, but with a much cleaner separation of projects from both each other and the base game. This is done by splitting projects into "applications" and "runtimes", partially inspired by the Flatpak and Snap packaging systems on Linux (though much less complex). Servers are also split into a separate area, to allow easier distribution and access to custom servers.
+
+## The XML file
+The core of the `manifest.xml` file looks like this:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<sunrise-manifest version="1.0" game="com.example.game1">
+    <name>My First Manifest</name>
+
+    <servers>
+        <!-- Server blocks go here -->
+    </servers>
+
+    <applications>
+        <!-- Application blocks go here -->
+    </applications>
+
+    <runtimes>
+        <!-- Runtime blocks go here -->
+    </runtimes>
+</sunrise-manifest>
+```
+
+On the main **sunrise-manifest** block, the version should always equal the specification's version number. The **game** attribute should be the same across all projects that target the same game - this way the launcher knows to only accept manifests for "game 1" and not "game 2".
+
+Inside the main block, only the **name** tag is required, which will show in the Sunrise options window as a label for end users to differentiate between what each manifest offers.
+
+The **servers**, **applications**, and **runtimes** blocks are all optional, so you only have to specify what your project actually provides. Most projects for example won't need to specify a runtime.
+
+## Runtimes
+Runtimes are intended to provide only the base game as it was published. This system was created so Sunrise could support projects in the case that servers are able to run alternate issues in the future (e.g. a new server offering Issue 1, or Issue 23).
+
+Each runtime is installed in a separate folder next to the Sunrise launcher, and applications are then layered on top of that.
+
+An example runtime would look something like this:
+
+```xml
+<runtimes>
+    <runtime id="com.example.myruntime">
+        <name>Runtime Issue 1</name>
+        <publisher>Lorem Ipsum</publisher>
+
+        <files>
+            <file name="qt4.dll" size="350824" md5="7652657fa392fb9418ccf309145dd7b4">
+                <url>http://example.com/repo/myruntime/qt4.dll</url>
+            </file>
+
+            <!-- Add more files here... -->
+        </files>
+    </runtime>
+</runtimes>
+```
+
+Fields supported:
+ - `name`: *Required.* Name of the runtime. Keep it simple. Avoid including your game's name, we all know what it's for - just the patch/expansion level it's for.
+ - `publisher`: *Required.* Publisher of the runtime.
+ - `files`: *Required.* A list of **file** tags, described later in this document.
+
+## Applications
+Applications are what most projects will only need. This is a custom set of files.
+
+*Please avoid overwriting any other application's files, try to use unique names for executables and throw any other resources into a new folder, ideally both named after your project. If you're just running a server that uses an existing application's code/resources, don't create a new application but use the Servers functionality instead!*
+
+An example application would look something like this:
+
+```xml
+<applications>
+    <application id="com.example.mygame" runtime="com.example.myruntime" custom-servers="true">
+        <name>My Game</name>
+        <publisher>Lorem Ipsum</publisher>
+        <icon>https://example.com/img/mygame-icon.png</icon>
+
+        <website type="home">https://example.com/mygame/</website>
+        <website type="forums">https://example.com/forums/</website>
+
+        <launcher exec="game.exe" params="-patchdir mygame -noversioncheck" />
+
+        <news url="http://example.com/mygame.rss" />
+
+        <files>
+            <file name="game.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e">
+                <url>http://example.com/repo/mygame/game.exe</url>
+            </file>
+
+            <!-- Add more files here... -->
+        </files>
+    </application>
+</applications>
+```
+
+Notice in the opening tag, there is a **runtime** attribute and a **custom-servers** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
+
+If **custom-servers** equals `true`, then the user will be presented with a list of servers they can connect to, to play the game. It defaults to `false` otherwise for projects which don't need/support this functionality.
+
+### Fields supported
+ - `name`, `publisher`, and `files` are the same as the Runtimes section. All required.
+ - `launcher`: *Required.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE YOUR SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER BLOCKS.***
+ - `icon`: *Recommended.* URL to an logo representing the project. Must be square, no larger than 512x512, and as a PNG or JPEG.
+ - `website`: *Optional.* URL of a website representing the project. There can be multiple website fields, but only one of each type. The valid types are:
+   - *home* (main homepage)
+   - *forums* (forums)
+   - *wiki* (wiki)
+   - *changelog* (for patch notes)
+   - *support* (for help/support)
+   - *issues* (for bug tracking/reporting)
+ - `news`: *Optional.* RSS feed containing latest news posts. The launcher will fetch up to 5 latest posts.
+
+## Servers
+The servers block is filled with multiple `server` fields, to make providing information on your project's main game servers easier.
+
+Users will also be able to define their own custom servers in the Options section of the launcher, but it is recommended to use a server field in your manifest where possible, so that the launcher can automatically update any changes to how players should connect.
+
+```xml
+<servers>
+    <server id="com.example.mygame.server1" name="Live Server" application="com.example.mygame" params="-auth 42.0.66.1" />
+</servers>
+```
+
+### Tags supported
+ - `id`: Unique ID.
+ - `name`: Name of the project/server, to be listed in a dropdown on the launcher.
+ - `application`: The ID of the application that this server is for.
+ - `params`: Launch parameters to add to the game, that specify how to access the server.
