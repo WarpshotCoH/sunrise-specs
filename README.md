@@ -16,11 +16,11 @@ There are currently two specifications detailed below. Comments can be sent to W
 
 Designed as a complete overhaul of the Tequila/Island Rum format.
 
-***See the [Manifest 1.0](Manifest 1.0/) folder for more information and examples.***
+***See the [Manifest 1.0](tree/master/Manifest 1.0/) folder for more information and examples.***
 
 ## Uptime/server spec
 ***Current version: 1.0 (working draft)***
 
 Not to be confused with the `servers` section of the Manifest spec, although the two may merge/become interoperable in the distant future.
 
-***See the [Uptime 1.0](Uptime 1.0/) folder for more information and examples.***
+***See the [Uptime 1.0](tree/master/Uptime 1.0/) folder for more information and examples.***
