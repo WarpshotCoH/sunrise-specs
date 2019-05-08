@@ -80,7 +80,7 @@ An example application would look something like this:
 
 ```xml
 <applications>
-    <application id="com.example.mygame" runtime="com.example.myruntime" custom-servers="true">
+    <application id="com.example.mygame" type="client" runtime="com.example.myruntime">
         <name>My Game</name>
         <publisher>Lorem Ipsum</publisher>
         <icon>https://example.com/img/mygame-icon.png</icon>
@@ -100,16 +100,38 @@ An example application would look something like this:
             <!-- Add more files here... -->
         </files>
     </application>
+
+    <application id="com.example.mod" type="mod" runtime="com.example.myruntime">
+        <name>My UI Mod</name>
+        <publisher>Lorem Ipsum</publisher>
+        <icon>https://example.com/img/mymod-icon.png</icon>
+
+        <website type="home">https://example.com/mymod/</website>
+        <website type="forums">https://example.com/forums/</website>
+
+        <news url="http://example.com/mymod.rss" />
+
+        <files>
+            <file name="images/ui_button.png" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+                <url>http://example.com/repo/mymod/ui_button.png</url>
+            </file>
+
+            <!-- Add more files here... -->
+        </files>
+    </application>
 </applications>
 ```
 
-Notice in the opening tag, there is a **runtime** attribute and a **custom-servers** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
+Notice in the opening tag, there is a **runtime** attribute and a **type** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
 
-If **custom-servers** equals `true`, then the user will be presented with a list of servers they can connect to, to play the game. It defaults to `false` otherwise for projects which don't need/support this functionality.
+The **type** attribute should either be:
+ - `client`: Applications that rely on custom servers to launch the game. Are given the most prominence in the Sunrise UI by way of server blocks hooking into them.
+ - `mod`: Modifications for the game that don't rely on custom servers. Including a launchable executable file is optional. Examples include "offline modes" of the game *(for including an executable)*, or visual & UI mods *(no executable)*.
+ - `tool`: Applications that don't rely on game data at all and are standalone, but with launching/updating provided as a mere convenience by Sunrise. Examples include build planning tools. These are installed separate
 
 ### Fields supported
  - `name`, `publisher`, and `files` are the same as the Runtimes section. All required.
- - `launcher`: *Required.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE YOUR SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER BLOCKS.***
+ - `launcher`: *Required for types client & tool, optional for type mod.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE YOUR SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER BLOCKS.***
  - `icon`: *Recommended.* URL to an logo representing the project. Must be square, no larger than 512x512, and as a PNG or JPEG.
  - `website`: *Optional.* URL of a website representing the project. There can be multiple website fields, but only one of each type. The valid types are:
    - *home* (main homepage)
@@ -121,15 +143,33 @@ If **custom-servers** equals `true`, then the user will be presented with a list
  - `news`: *Optional.* RSS feed containing latest news posts. The launcher will fetch up to 5 latest posts.
 
 ## Servers
+***TO BE REWRITTEN SHORTLY, IGNORE BELOW***
+
+*Not to be confused with the Server/Uptime spec, although the two may merge/become interoperable in the distant future.*
+
 The servers block is filled with multiple `server` fields, to make providing information on your project's main game servers easier.
 
 Users will also be able to define their own custom servers in the Options section of the launcher, but it is recommended to use a server field in your manifest where possible, so that the launcher can automatically update any changes to how players should connect.
 
 ```xml
 <servers>
-    <server id="com.example.mygame.server1" name="Live Server" application="com.example.mygame" params="-auth 42.0.66.1" />
+    <server id="com.example.myserver" application="com.example.mygame">
+        <name>Test Server</name>
+        <publisher>Server Group</publisher>
+        <icon>https://example.com/img/myserver-icon.png</icon>
+
+        <website type="home">https://example.com/myserver/</website>
+        <website type="forums">https://example.com/forums/</website>
+
+        <launcher params="-auth 42.0.66.1" />
+
+        <news url="http://example.com/myserver.rss" />
+    </server>
 </servers>
 ```
+
+
+Notice in the opening tag, there is a **runtime** attribute and a **custom-servers** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
 
 ### Tags supported
  - `id`: Unique ID.
