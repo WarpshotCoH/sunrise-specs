@@ -44,7 +44,7 @@ The root takes two tags, `name` and `updated` for the server group's name and wh
     <server type="game">
         <name>Liberation</name>
         <available value="true" />
-        <players current="500" max="1000" />
+        <players current="500" max="1000" queue="0" />
     </server>
 </servers>
 ```
@@ -61,4 +61,7 @@ The server tag accepts one attribute, **type**, which should equal either:
  - `available`: *Required.* Takes two attributes:
    - `value`: *Required.* Whether the server is available & accessible.
    - `last-available`: *Optional.* ISO 8601 timestamp of when the server was last available.
- - `players`: *Optional.* For `type="auth|game"` servers only. Takes two attributes of `current` and `max` for current and maximum capacity.
+ - `players`: *Optional.* For `type="auth|game"` servers only - if attached to auth servers this should be a combined total of every game server it links to. Takes three attributes:
+   - `current`: *Recommended.* Current player count.
+   - `max`: *Optional.* Maximum player capacity.
+   - `queue`: *Optional.* Players currently queued to join (when server is at max capacity).
