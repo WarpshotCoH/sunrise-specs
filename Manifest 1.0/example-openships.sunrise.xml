@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<sunrise-manifest version="1.0" game="com.example.starships">
+    <name>OpenShips Servers</name>
+
+    <servers>
+        <server id="net.openships.liberation" application="com.serpentdev.client">
+            <name>OpenShips Liberation</name>
+            <icon>https://openships.net/img/liberation-icon.png</icon>
+
+            <website type="home">https://openships.net</website>
+            <website type="forums">https://openships.net/forums/</website>
+            <news url="http://openships.net/news.rss" />
+
+            <launcher params="-auth 42.0.66.1" />
+        </server>
+    </servers>
+</sunrise-manifest>

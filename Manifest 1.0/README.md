@@ -12,6 +12,8 @@ The Sunrise manifest format provides a clean separation of different client proj
 > - Serpent have also created an optional UI mod called "NewUI". This has the application ID `com.serpentdev.newui`.
 > - Another separate group called "OpenShips" are the team running a public server called "Liberation". Their server ID is `net.openships.liberation`. This server uses the Serpent client.
 
+You can see two example manifests in this folder - these are complete versions of the snippets below. It is assumed that the user would have the "SerpentDev" one installed by default, and then add the "OpenShips" one on top.
+
 ## The XML file
 To avoid confusion with other manifests or XML files, it is recommended (but not required) that the XML file hosted by your server uses the `.sunrise.xml` extension. For example, the manifest for OpenShips may be accessible from https://openships.net/repo/openships.sunrise.xml.
 

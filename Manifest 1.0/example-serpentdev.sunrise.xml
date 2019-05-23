@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<sunrise-manifest version="1.0" game="com.example.starships">
+    <name>SerpentDev</name>
+
+    <applications>
+        <application id="com.serpentdev.client" type="client" runtime="com.example.starships.liberation">
+            <name>My Game</name>
+            <publisher>Serpent</publisher>
+            <icon>https://serpentdev.com/img/icon.png</icon>
+
+            <website type="home">https://serpentdev.com</website>
+            <website type="issues">https://git.serpentdev.com/serpent/client/issues</website>
+            <news url="http://serpentdev.com/starships.rss" />
+
+            <launcher exec="serpent.exe" params="-patchdir serpent -console" />
+
+            <files>
+                <file name="serpent.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+                    <url>http://serpentdev.com/repo/starships/serpent.exe</url>
+                    <url>http://mymirror.com/starships/serpent.exe</url>
+                </file>
+
+                <!-- Add more files here... -->
+            </files>
+        </application>
+
+        <application id="com.serpentdev.newui" type="mod" runtime="com.example.starships.liberation">
+            <name>NewUI</name>
+            <publisher>Serpent</publisher>
+            <icon>https://serpentdev.com/img/mymod-icon.png</icon>
+
+            <website type="home">https://serpentdev.com/newui/</website>
+            <news url="http://serpentdev.com/newui.rss" />
+
+            <files>
+                <file name="images/ui_button.png" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+                    <url>http://serpentdev.com/repo/newui/ui_button.png</url>
+                    <url>http://mymirror.com/newui/ui_button.png</url>
+                </file>
+
+                <!-- Add more files here... -->
+            </files>
+        </application>
+    </applications>
+
+    <runtimes>
+        <runtime id="com.example.starships.liberation">
+            <name>Liberation</name>
+            <publisher>ExampleCorp</publisher>
+            <icon>https://example.com/img/starships-icon.png</icon>
+
+            <files>
+                <file name="ssdata.bin" size="350824" md5="7652657fa392fb9418ccf309145dd7b4" sha512="5814080fe36fa332950c1e56debbc0da7afee699708d8d4af0e4310ed27ce37124b5cf80a08effc9bd4ee5806bcc0a9f7ea6bdc64cee7ef5057fc20d39c9d182">
+                    <url>http://example.com/repo/starships/ssdata.bin</url>
+                </file>
+
+                <!-- Add more files here... -->
+            </files>
+        </runtime>
+    </runtimes>
+</sunrise-manifest>
