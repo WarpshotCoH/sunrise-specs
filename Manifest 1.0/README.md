@@ -1,53 +1,65 @@
 # Sunrise manifest specification
 ***Version 1.0 (working draft)***
 
-The Sunrise manifest format is partially based on the previous Tequila/Island Rum format, but with a much cleaner separation of projects from both each other and the base game. This is done by splitting projects into "applications" and "runtimes", partially inspired by the Flatpak and Snap packaging systems on Linux (though much less complex). Servers are also split into a separate area, to allow easier distribution and access to custom servers.
+The Sunrise manifest format provides a clean separation of different client projects from both each other and the original base game. This is done by splitting projects into "applications" and "runtimes", partially inspired by the Flatpak and Snap packaging systems on Linux (though much less complex). Servers are also split into a separate area, to allow easier distribution and access to custom servers that can share application code.
+
+> ***Example game/servers***
+>
+> To illustrate how all the pieces of Sunrise work together, through the example XML snippets in this file we are going to assume that:
+> - The game Sunrise is targeting is called "Starships", published by "ExampleCorp". Its original website before shutdown was http://starships.example.com, so for the root game ID we would use `com.example.starships`.
+> - Starships has one major expansion, "Lightspeed". This expansion was universally beloved *(ha)*. Its runtime ID would therefore be `com.example.starships.lightspeed`.
+> - A group of coders called "Serpent" has created and published an update to the game client to work with custom servers. This works with the original Lightspeed files, so it is layered as an application with the ID `com.serpentdev.client`.
+> - Serpent have also created an optional UI mod called "NewUI". This has the application ID `com.serpentdev.newui`.
+> - Another separate group called "OpenShips" are the team running a public server called "Liberation". Their server ID is `net.openships.liberation`. This server uses the Serpent client.
 
 ## The XML file
-The core of the `manifest.xml` file looks like this:
+To avoid confusion with other manifests or XML files, it is recommended (but not required) that the XML file hosted by your server uses the `.sunrise.xml` extension. For example, the manifest for OpenShips may be accessible from https://openships.net/repo/openships.sunrise.xml.
+
+The core of the XML file looks like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<sunrise-manifest version="1.0" game="com.example.game1">
-    <name>My First Manifest</name>
+<sunrise-manifest version="1.0" game="com.example.starships">
+    <name>OpenShips Servers</name>
 
     <servers>
-        <!-- Server blocks go here -->
+        <!-- Server tags go here -->
     </servers>
 
     <applications>
-        <!-- Application blocks go here -->
+        <!-- Application tags go here -->
     </applications>
 
     <runtimes>
-        <!-- Runtime blocks go here -->
+        <!-- Runtime tags go here -->
     </runtimes>
 </sunrise-manifest>
 ```
 
-On the main **sunrise-manifest** block, the version should always equal the specification's version number. The **game** attribute should be the same across all projects that target the same game - this way the launcher knows to only accept manifests for "game 1" and not "game 2".
+On the root **sunrise-manifest** block, the version should always equal this specification's version number. The **game** attribute should be the same across all projects that target the same game - this way the launcher knows to only accept manifests for "game 1" and not "game 2". It is *not* for your server/project name, just the game it targets.
 
-Inside the main block, only the **name** tag is required, which will show in the Sunrise options window as a label for end users to differentiate between what each manifest offers.
+Inside the root element, only the `name` tag is required, which will show in the Sunrise options window as a label for end users to differentiate between what each manifest offers.
 
-The **servers**, **applications**, and **runtimes** blocks are all optional, so you only have to specify what your project actually provides. Most projects for example won't need to specify a runtime.
+The `servers`, `applications`, and `runtimes` blocks are all optional, so you only have to specify what your project actually provides. Most projects for example won't need to specify a runtime.
 
 ## Runtimes
-Runtimes are intended to provide only the base game as it was published. This system was created so Sunrise could support projects in the case that servers are able to run alternate issues in the future (e.g. a new server offering Issue 1, or Issue 23).
+Runtimes are intended to provide only the base game as it was published. This system was created so Sunrise could support the case of servers that are based on different versions/expansions of the original game.
 
-Each runtime is installed in a separate folder next to the Sunrise launcher, and applications are then layered on top of that.
+Each runtime is installed in a separate folder next to the Sunrise launcher (e.g. `C:\Sunrise\runtimes\com.example.starships.liberation`), and applications are then layered on top of that.
 
 An example runtime would look something like this:
 
 ```xml
 <runtimes>
-    <runtime id="com.example.myruntime">
-        <name>Runtime Issue 1</name>
-        <publisher>Lorem Ipsum</publisher>
+    <runtime id="com.example.starships.liberation">
+        <name>Liberation</name>
+        <publisher>ExampleCorp</publisher>
+        <icon>https://example.com/img/starships-icon.png</icon>
 
         <files>
-            <file name="qt4.dll" size="350824" md5="7652657fa392fb9418ccf309145dd7b4" sha512="5814080fe36fa332950c1e56debbc0da7afee699708d8d4af0e4310ed27ce37124b5cf80a08effc9bd4ee5806bcc0a9f7ea6bdc64cee7ef5057fc20d39c9d182">
-                <url>http://example.com/repo/myruntime/qt4.dll</url>
+            <file name="ssdata.bin" size="350824" md5="7652657fa392fb9418ccf309145dd7b4" sha512="5814080fe36fa332950c1e56debbc0da7afee699708d8d4af0e4310ed27ce37124b5cf80a08effc9bd4ee5806bcc0a9f7ea6bdc64cee7ef5057fc20d39c9d182">
+                <url>http://example.com/repo/starships/ssdata.bin</url>
             </file>
 
             <!-- Add more files here... -->
@@ -56,64 +68,66 @@ An example runtime would look something like this:
 </runtimes>
 ```
 
-Fields supported:
+The runtime tag has an `id` attribute.
+
+### Tags supported:
  - `name`: *Required.* Name of the runtime. Keep it simple. Avoid including your game's name, we all know what it's for - just the patch/expansion level it's for.
  - `publisher`: *Required.* Publisher of the runtime.
+ - `icon`: *Recommended.* URL to an logo representing the project. Must be square, no larger than 512x512, and as a PNG or JPEG.
  - `files`: *Required.* A list of **file** tags (see below).
 
 ### File tags
-File tags support:
+File tags support the following attributes:
 
  - `name`: *Required.* Final installed filepath.
  - `size`: *Required.* File size.
  - `md5`: *Required.* MD5 sum of the file.
  - `sha512`: *Recommended.* SHA-512 sum of the file.
 
-Within the file tags is a list of publicly accessible URLs that point to valid mirrors. Other download capabilities other than HTTP/HTTPS may be added in the future.
+Within the file tags is a list of publicly accessible URLs, wrapped in `url` tags, that point to valid mirrors. Other download capabilities other than HTTP/HTTPS may be added in the future.
 
 ## Applications
-Applications are what most projects will only need. This is a custom set of files.
+Applications are what most projects will need. This is a custom set of files applied on top of the runtime itself, for servers with custom content or fixes to their game client.
 
-*Please avoid overwriting any other application's files, try to use unique names for executables and throw any other resources into a new folder, ideally both named after your project. If you're just running a server that uses an existing application's code/resources, don't create a new application but use the Servers functionality instead!*
+*Please avoid overwriting any other application's files! Try to use unique names for executables and throw any other resources into a new folder, ideally both named after your project. If you're just running a server that uses an existing application's code/resources, don't create a new application but use the Servers functionality instead!*
 
 An example application would look something like this:
 
 ```xml
 <applications>
-    <application id="com.example.mygame" type="client" runtime="com.example.myruntime">
+    <application id="com.serpentdev.client" type="client" runtime="com.example.starships.liberation">
         <name>My Game</name>
-        <publisher>Lorem Ipsum</publisher>
-        <icon>https://example.com/img/mygame-icon.png</icon>
+        <publisher>Serpent</publisher>
+        <icon>https://serpentdev.com/img/icon.png</icon>
 
-        <website type="home">https://example.com/mygame/</website>
-        <website type="forums">https://example.com/forums/</website>
+        <website type="home">https://serpentdev.com</website>
+        <website type="issues">https://git.serpentdev.com/serpent/client/issues</website>
+        <news url="http://serpentdev.com/starships.rss" />
 
-        <launcher exec="game.exe" params="-patchdir mygame -noversioncheck" />
-
-        <news url="http://example.com/mygame.rss" />
+        <launcher exec="serpent.exe" params="-patchdir serpent -console" />
 
         <files>
-            <file name="game.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
-                <url>http://example.com/repo/mygame/game.exe</url>
+            <file name="serpent.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+                <url>http://serpentdev.com/repo/starships/serpent.exe</url>
+                <url>http://mymirror.com/starships/serpent.exe</url>
             </file>
 
             <!-- Add more files here... -->
         </files>
     </application>
 
-    <application id="com.example.mod" type="mod" runtime="com.example.myruntime">
-        <name>My UI Mod</name>
-        <publisher>Lorem Ipsum</publisher>
-        <icon>https://example.com/img/mymod-icon.png</icon>
+    <application id="com.serpentdev.newui" type="mod" runtime="com.example.starships.liberation">
+        <name>NewUI</name>
+        <publisher>Serpent</publisher>
+        <icon>https://serpentdev.com/img/mymod-icon.png</icon>
 
-        <website type="home">https://example.com/mymod/</website>
-        <website type="forums">https://example.com/forums/</website>
-
-        <news url="http://example.com/mymod.rss" />
+        <website type="home">https://serpentdev.com/newui/</website>
+        <news url="http://serpentdev.com/newui.rss" />
 
         <files>
             <file name="images/ui_button.png" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
-                <url>http://example.com/repo/mymod/ui_button.png</url>
+                <url>http://serpentdev.com/repo/newui/ui_button.png</url>
+                <url>http://mymirror.com/newui/ui_button.png</url>
             </file>
 
             <!-- Add more files here... -->
@@ -125,14 +139,13 @@ An example application would look something like this:
 Notice in the opening tag, there is a **runtime** attribute and a **type** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
 
 The **type** attribute should either be:
- - `client`: Applications that rely on custom servers to launch the game. Are given the most prominence in the Sunrise UI by way of server blocks hooking into them.
+ - `client`: Applications that rely on custom servers to launch the game. Are given the most prominence in the Sunrise UI by way of server tags hooking into them.
  - `mod`: Modifications for the game that don't rely on custom servers. Including a launchable executable file is optional. Examples include "offline modes" of the game *(for including an executable)*, or visual & UI mods *(no executable)*.
  - `tool`: Applications that don't rely on game data at all and are standalone, but with launching/updating provided as a mere convenience by Sunrise. Examples include build planning tools. These are installed separate
 
-### Fields supported
+### Tags supported
  - `name`, `publisher`, and `files` are the same as the Runtimes section. All required.
- - `launcher`: *Required for types client & tool, optional for type mod.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE YOUR SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER BLOCKS.***
- - `icon`: *Recommended.* URL to an logo representing the project. Must be square, no larger than 512x512, and as a PNG or JPEG.
+ - `icon` is the same as the Runtimes section, and is recommended but not required.
  - `website`: *Optional.* URL of a website representing the project. There can be multiple website fields, but only one of each type. The valid types are:
    - *home* (main homepage)
    - *forums* (forums)
@@ -141,38 +154,33 @@ The **type** attribute should either be:
    - *support* (for help/support)
    - *issues* (for bug tracking/reporting)
  - `news`: *Optional.* RSS feed containing latest news posts. The launcher will fetch up to 5 latest posts.
+ - `launcher`: *Required for types client & tool, optional for type mod.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE ANY SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER TAGS BELOW.***
 
 ## Servers
-***TO BE REWRITTEN SHORTLY, IGNORE BELOW***
+*This section is not to be confused with the Server/Uptime spec, although the two may merge/become interoperable in the distant future.*
 
-*Not to be confused with the Server/Uptime spec, although the two may merge/become interoperable in the distant future.*
-
-The servers block is filled with multiple `server` fields, to make providing information on your project's main game servers easier.
+The servers block is filled with multiple `server` tags, to make providing information on your project's main game servers easier.
 
 Users will also be able to define their own custom servers in the Options section of the launcher, but it is recommended to use a server field in your manifest where possible, so that the launcher can automatically update any changes to how players should connect.
 
 ```xml
 <servers>
-    <server id="com.example.myserver" application="com.example.mygame">
-        <name>Test Server</name>
-        <publisher>Server Group</publisher>
-        <icon>https://example.com/img/myserver-icon.png</icon>
+    <server id="net.openships.liberation" application="com.serpentdev.client">
+        <name>OpenShips Liberation</name>
+        <icon>https://openships.net/img/liberation-icon.png</icon>
 
-        <website type="home">https://example.com/myserver/</website>
-        <website type="forums">https://example.com/forums/</website>
+        <website type="home">https://openships.net</website>
+        <website type="forums">https://openships.net/forums/</website>
+        <news url="http://openships.net/news.rss" />
 
         <launcher params="-auth 42.0.66.1" />
-
-        <news url="http://example.com/myserver.rss" />
     </server>
 </servers>
 ```
 
-
-Notice in the opening tag, there is a **runtime** attribute and a **custom-servers** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
+The opening tag supports the **id** attribute and an **application** attribute - the latter simply specifies the ID of the application this server is designed to work with.
 
 ### Tags supported
- - `id`: Unique ID.
- - `name`: Name of the project/server, to be listed in a dropdown on the launcher.
- - `application`: The ID of the application that this server is for.
- - `params`: Launch parameters to add to the game, that specify how to access the server.
+ - `name`, is the same as the Applications section, and is required.
+ - `icon` and `website` are the same as the Applications section, but are recommended, not required.
+ - `launcher`: Takes only the **params** attribute, which is appended to the executable/params of the target application's launcher. This is only really for configuring what IP/URL to connect to.
