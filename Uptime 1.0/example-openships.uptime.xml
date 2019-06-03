@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<sunrise-status version="1.0" game="com.example.starships">
+    <name>OpenShips Servers</name>
+    <updated>2019-05-01T13:00:00Z</updated>
+
+    <servers>
+        <server type="website">
+            <name>Forums</name>
+            <available value="true" last-available="2019-05-01T10:00:00Z" />
+        </server>
+
+        <server type="auth">
+            <available value="true" last-available="2019-05-01T10:00:00Z" />
+        </server>
+
+        <server type="game">
+            <name>Liberation</name>
+            <available value="true" />
+            <players current="500" max="1000" queue="0" />
+        </server>
+    </servers>
+</sunrise-status>

@@ -14,6 +14,8 @@ Note that this specification **does not** deal with its implementation, that and
 > - A group of coders called "Serpent" has created and published an update to the game client to work with custom servers.
 > - Another separate group called "OpenShips" are the team running a public server called "Liberation". Their server ID is `net.openships.liberation`. This server uses the Serpent client.
 
+You can see an example uptime XML in this folder - this is a complete version of the snippets below.
+
 ## The XML file
 To avoid confusion, it is recommended (but not required) that the XML file hosted by your server uses the `.status.xml` extension. For example, information from "OpenShips" servers may be accessible from https://openships.net/servers.status.xml.
 
