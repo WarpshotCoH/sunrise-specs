@@ -76,17 +76,7 @@ The runtime tag has an `id` attribute.
  - `name`: *Required.* Name of the runtime. Keep it simple. Avoid including your game's name, we all know what it's for - just the patch/expansion level it's for.
  - `publisher`: *Required.* Publisher of the runtime.
  - `icon`: *Recommended.* URL to an logo representing the project. Must be square, no larger than 512x512, and as a PNG or JPEG.
- - `files`: *Required.* A list of **file** tags (see below).
-
-### File tags
-File tags support the following attributes:
-
- - `name`: *Required.* Final installed filepath.
- - `size`: *Required.* File size.
- - `md5`: *Required.* MD5 sum of the file.
- - `sha512`: *Recommended.* SHA-512 sum of the file.
-
-Within the file tags is a list of publicly accessible URLs, wrapped in `url` tags, that point to valid mirrors. Other download capabilities other than HTTP/HTTPS may be added in the future.
+ - `files`: *Required.* A list of **file** tags (see the *"Files and Sources"* section below).
 
 ## Applications
 Applications are what most projects will need. This is a custom set of files applied on top of the runtime itself, for servers with custom content or fixes to their game client.
@@ -114,6 +104,13 @@ An example application would look something like this:
                 <url>http://serpentdev.com/repo/starships/serpent.exe</url>
                 <url>http://mymirror.com/starships/serpent.exe</url>
             </file>
+
+            <file name="data/mydata2.bin" size="350824" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a">
+                <url>http://serpentdev.com/repo/starships/mydata2.bin</url>
+                <url>http://mymirror.com/starships/mydata2.bin</url>
+            </file>
+
+            <exclude name="data/ss2.bin" />
 
             <!-- Add more files here... -->
         </files>
@@ -200,3 +197,54 @@ The opening tag supports the **id** attribute and an **application** attribute -
  - `name`, is the same as the Applications section, and is required.
  - `icon` and `website` are the same as the Applications section, but are recommended, not required.
  - `launcher`: Takes only the **params** attribute, which is appended to the executable/params of the target application's launcher. This is only really for configuring what IP/URL to connect to.
+
+## Files and Sources
+There are currently two ways you can supply file URLs for Sunrise runtimes and applications.
+
+### Method 1 - using Sources
+Using this method, the `files` block only contains `file` tags containing the file info, but no URLs.
+
+```xml
+<sources>
+    <http url="http://serpentdev.com/repo/starships/" />
+    <http url="http://mymirror.com/starships/" />
+</sources>
+
+<files>
+    <file name="serpent.exe" size="9107968" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a" />
+    <file name="data/mydata2.bin" size="350824" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a" />
+
+    <exclude name="data/ss2.bin" />
+    <!-- Add more files here... -->
+</files>
+```
+
+The `sources` block supports the following tags:
+ - `http`: Has one attribute, **url**, that points to either a HTTP or HTTPS folder. The file name is appended to the end of it, so make sure you keep any client directory structures intact.
+ - `torrent`: *Not implemented yet, coming soon.*
+
+The `files` block supports `file` tags, with the following attributes:
+ - `name`: *Required.* Final installed filepath. Use forward slashes (**/**) for directory separators.
+ - `size`: *Required.* File size.
+ - `md5`: *Required.* MD5 sum of the file.
+ - `sha512`: *Recommended.* SHA-512 sum of the file.
+
+You can also add `exclude` tags to the `files` block. These take only a **name** attribute, and specify file names from the target runtime that are unused. This is so users don't have to download outdated DLLs or data files if they're only playing with clients that replace them.
+
+Applications with `standalone="true"` will automatically apply exclusions to runtime files with the same name as a `file` tag in the application.
+
+### Method 2 - URL array
+This method is not recommended and is more of an "in case of emergency" option where your current mirror has some weird organisation, or not all mirrors supply the correct files.
+
+```xml
+<files>
+    <file name="serpent.exe" size="9107968" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a">
+        <url>http://serpentdev.com/repo/starships/serpent.exe</url>
+        <url>http://mymirror.com/starships/serpent.exe</url>
+    </file>
+
+    <!-- Add more files here... -->
+</files>
+```
+
+The contents of the `files` block and their tags are the same as Method 1 above, but `file` tags are not self-enclosed and instead have `url` tags as children.
