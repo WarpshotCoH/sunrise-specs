@@ -172,9 +172,9 @@ The `<launcher params="" />` value can take several variables, to make updating 
 ## Servers
 *This section is not to be confused with the Server/Uptime spec, although the two may merge/become interoperable in the distant future.*
 
-The servers block is filled with multiple `server` tags, to make providing information on your project's main game servers easier.
+The servers block is filled with multiple `server` tags, to make providing information on your project's main game servers simple and somewhat separated from game data (in cases where multiple servers use the same client/patches).
 
-Users will also be able to define their own custom servers in the Options section of the launcher, but it is recommended to use a server field in your manifest where possible, so that the launcher can automatically update any changes to how players should connect.
+Users will also be able to define their own custom servers in the Options section of the launcher, but it is recommended to use a server field in your manifest where possible, so that the launcher can automatically update any changes to your project and how players should connect.
 
 ```xml
 <servers>
