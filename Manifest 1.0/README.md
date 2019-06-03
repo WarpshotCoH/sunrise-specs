@@ -159,7 +159,16 @@ The **type** attribute should either be:
    - *support* (for help/support)
    - *issues* (for bug tracking/reporting)
  - `news`: *Optional.* RSS feed containing latest news posts. The launcher will fetch up to 5 latest posts.
- - `launcher`: *Required for types client & tool, optional for type mod.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. ***DO NOT INCLUDE ANY SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER TAGS BELOW.***
+ - `launcher`: *Required for types client & tool, optional for type mod.* Name of the EXE file to run in the **exec** attribute, and launch parameters in the **params** attribute. These can also take certain variables (see below). ***DO NOT INCLUDE ANY SERVER DETAILS IN THE PARAMATERS, THESE ARE HANDLED BY THE SERVER TAGS BELOW.***
+
+### Launcher parameter variables
+The `<launcher params="" />` value can take several variables, to make updating them less of a pain. These are:
+
+ - `$APP_ID`: App ID
+ - `$APP_VERSION`: App version *(if `version` tag is set)*
+ - `$RT_ID`: Runtime ID
+ - `$APP_PATH` & `$RT_PATH`: App/runtime relative folder path
+ - `$APP_ABSPATH` & `$RT_ABSPATH`: App/runtime absolute folder path
 
 ## Servers
 *This section is not to be confused with the Server/Uptime spec, although the two may merge/become interoperable in the distant future.*
