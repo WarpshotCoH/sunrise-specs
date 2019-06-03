@@ -100,6 +100,7 @@ An example application would look something like this:
     <application id="com.serpentdev.client" type="client" runtime="com.example.starships.liberation">
         <name>My Game</name>
         <publisher>Serpent</publisher>
+        <version>v2.1.0</version>
         <icon>https://serpentdev.com/img/icon.png</icon>
 
         <website type="home">https://serpentdev.com</website>
@@ -121,6 +122,7 @@ An example application would look something like this:
     <application id="com.serpentdev.newui" type="mod" runtime="com.example.starships.liberation">
         <name>NewUI</name>
         <publisher>Serpent</publisher>
+        <version>v0.7.1</version>
         <icon>https://serpentdev.com/img/mymod-icon.png</icon>
 
         <website type="home">https://serpentdev.com/newui/</website>
@@ -147,6 +149,7 @@ The **type** attribute should either be:
 
 ### Tags supported
  - `name`, `publisher`, and `files` are the same as the Runtimes section. All required.
+ - `version`: String containing the version number. There's no set format here as it's not currently used internally, it's just user-facing *(although can optionally be used as a variable - see below)*.
  - `icon` is the same as the Runtimes section, and is recommended but not required.
  - `website`: *Optional.* URL of a website representing the project. There can be multiple website fields, but only one of each type. The valid types are:
    - *home* (main homepage)
