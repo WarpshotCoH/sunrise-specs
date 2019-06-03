@@ -97,7 +97,7 @@ An example application would look something like this:
 
 ```xml
 <applications>
-    <application id="com.serpentdev.client" type="client" runtime="com.example.starships.liberation">
+    <application id="com.serpentdev.client" type="client" runtime="com.example.starships.liberation" standalone="true">
         <name>My Game</name>
         <publisher>Serpent</publisher>
         <version>v2.1.0</version>
@@ -140,12 +140,14 @@ An example application would look something like this:
 </applications>
 ```
 
-Notice in the opening tag, there is a **runtime** attribute and a **type** attribute. The **runtime** attribute simply specifies the ID of the runtime folder this application should be installed to.
-
-The **type** attribute should either be:
- - `client`: Applications that rely on custom servers to launch the game. Are given the most prominence in the Sunrise UI by way of server tags hooking into them.
- - `mod`: Modifications for the game that don't rely on custom servers. Including a launchable executable file is optional. Examples include "offline modes" of the game *(for including an executable)*, or visual & UI mods *(no executable)*.
- - `tool`: Applications that don't rely on game data at all and are standalone, but with launching/updating provided as a mere convenience by Sunrise. Examples include build planning tools. These are installed separate
+### Attributes supported
+ - `id`: *Required.* Unique application ID.
+ - `runtime`: *Required.* Target runtime this app depends on.
+ - `type`: *Optional.* Defaults to **"client"**. Should either be:
+   - `client`: Applications that rely on custom servers to launch the game. Are given the most prominence in the Sunrise UI by way of server tags hooking into them.
+   - `mod`: Modifications for the game that don't rely on custom servers. Including a launchable executable file is optional. Examples include "offline modes" of the game *(for including an executable)*, or visual & UI mods *(no executable)*.
+   - `tool`: Applications that are standalone and not part of the game, but launching/updating is provided as a mere convenience by Sunrise. Examples include build planning tools, chat parsers etc.
+ - `standalone`: *Optional.* Defaults to **"false"**. If false, install this application in the runtime directory. If true, install this application in its own directory.
 
 ### Tags supported
  - `name`, `publisher`, and `files` are the same as the Runtimes section. All required.
