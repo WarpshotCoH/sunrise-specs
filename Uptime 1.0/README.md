@@ -7,6 +7,13 @@ Note that this specification **does not** deal with its implementation, that and
 
 *Not to be confused with the `servers` section of the Manifest spec, although the two may merge/become interoperable in the distant future.*
 
+> ***Example game/servers***
+>
+> To illustrate how all the pieces of Sunrise work together, through the example XML snippets in this file we are going to assume that:
+> - The game Sunrise is targeting is called "Starships", published by "ExampleCorp". Its original website before shutdown was http://starships.example.com, so for the root game ID we would use `com.example.starships`.
+> - A group of coders called "Serpent" has created and published an update to the game client to work with custom servers.
+> - Another separate group called "OpenShips" are the team running a public server called "Liberation". Their server ID is `net.openships.liberation`. This server uses the Serpent client.
+
 ## The XML file
 To avoid confusion, it is recommended (but not required) that the XML file hosted by your server uses the `.status.xml` extension. For example, information from "OpenShips" servers may be accessible from https://openships.net/servers.status.xml.
 

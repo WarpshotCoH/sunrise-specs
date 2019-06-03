@@ -60,8 +60,8 @@ An example runtime would look something like this:
         <icon>https://example.com/img/starships-icon.png</icon>
 
         <files>
-            <file name="ssdata.bin" size="350824" md5="7652657fa392fb9418ccf309145dd7b4" sha512="5814080fe36fa332950c1e56debbc0da7afee699708d8d4af0e4310ed27ce37124b5cf80a08effc9bd4ee5806bcc0a9f7ea6bdc64cee7ef5057fc20d39c9d182">
-                <url>http://example.com/repo/starships/ssdata.bin</url>
+            <file name="data/ss1.bin" size="350824" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a">
+                <url>http://example.com/repo/starships/data/ss1.bin</url>
             </file>
 
             <!-- Add more files here... -->
@@ -109,7 +109,7 @@ An example application would look something like this:
         <launcher exec="serpent.exe" params="-patchdir serpent -console" />
 
         <files>
-            <file name="serpent.exe" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+            <file name="serpent.exe" size="9107968" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a">
                 <url>http://serpentdev.com/repo/starships/serpent.exe</url>
                 <url>http://mymirror.com/starships/serpent.exe</url>
             </file>
@@ -127,7 +127,7 @@ An example application would look something like this:
         <news url="http://serpentdev.com/newui.rss" />
 
         <files>
-            <file name="images/ui_button.png" size="9107968" md5="41616f6dc3501bbb1c9b2bac0b51099e" sha512="d7ce630c91a4bd10499ae5b88c7116f773527d52cd80a0b82544a3dd7a39692afc76ae61a9f203f86020fa615f6c8e17e066b900314caa051bb3cde6d5f261d6">
+            <file name="images/ui_button.png" size="9107968" md5="48f17b33fcff1cd05001c48f23af01d8" sha512="7fc53d68471e530aab3404bb61751b70135225ee7565420516655943062ff0eb1478e9cd3bf228289f3d5a861725b78162afdee1621374b02b8768f073d5667a">
                 <url>http://serpentdev.com/repo/newui/ui_button.png</url>
                 <url>http://mymirror.com/newui/ui_button.png</url>
             </file>
